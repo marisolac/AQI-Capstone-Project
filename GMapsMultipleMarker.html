@@ -1,0 +1,47 @@
+<<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  <title>Google Maps Multiple Markers</title>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBKNIv2SWAfJwW47Fcbz3kZzu1XKv6Lp-4&callback=initMap"
+          type="text/javascript"></script>
+</head>
+<body>
+  <div id="map" style="width: 800px; height: 600px;"></div>
+
+  <script type="text/javascript">
+    var locations = [
+      ['Redmond', 44.2654227,-121.2513953,6],
+      ['OSU-Cascades', 44.042968,-121.3356764, 5],
+      ['E::Space Labs', 44.050576,-121.291151, 4],
+      ['Mt Bachelor', 44.0032939,-121.6875381, 3],
+      ['Sunriver Brewing', 44.0564906,-121.3293278, 2],
+      ['My House', 43.9913232,-121.3832031, 1]
+    ];
+
+    var map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 10,
+      center: new google.maps.LatLng(44.0590808,-121.3208445),
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    });
+
+    var infowindow = new google.maps.InfoWindow();
+
+    var marker, i;
+
+    for (i = 0; i < locations.length; i++) {
+      marker = new google.maps.Marker({
+        position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+        map: map
+      });
+
+      google.maps.event.addListener(marker, 'click', (function(marker, i) {
+        return function() {
+          infowindow.setContent(locations[i][0]);
+          infowindow.open(map, marker);
+        }
+      })(marker, i));
+    }
+  </script>
+</body>
+</html>
