@@ -1,0 +1,75 @@
+<<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  <title>Google Maps Multiple Markers</title>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBKNIv2SWAfJwW47Fcbz3kZzu1XKv6Lp-4&callback=initMap"
+          type="text/javascript"></script>
+</head>
+<body>
+  <div id="map" style="width: 800px; height: 600px;"></div>
+
+  <script type="text/javascript">
+
+var json = [
+  {
+    "title": "OSU-C",
+    "lat": 44.042968,
+    "lng":-121.3356764,
+    "description": "AQI=10"
+  },
+  {
+    "title": "E::Space",
+    "lat": 44.050576,
+    "lng": -121.291151,
+    "description": "AQI = 12"
+  },
+  {
+    "title": "Sunriver Brewing",
+    "lat": 44.0564906,
+    "lng": -121.3293278,
+    "description": "Dope brews"
+  }
+]
+//Map initialization
+var map = new google.maps.Map(document.getElementById('map'), {
+  zoom: 10,
+  center: new google.maps.LatLng(44.0590808,-121.3208445),
+  mapTypeId: google.maps.MapTypeId.ROADMAP
+});
+
+for (var i = 0, length = json.length; i < length; i++) {
+  var data = json[i],
+      latLng = new google.maps.LatLng(data.lat, data.lng);
+
+  // Creating a marker and putting it on the map
+  var marker = new google.maps.Marker({
+    position: latLng,
+    map: map,
+    title: data.title
+  });
+}
+
+var infoWindow = new google.maps.InfoWindow();
+
+// Attaching a click event to the current marker
+google.maps.event.addListener(marker, "click", function(e) {
+  infoWindow.setContent(data.description);
+  infoWindow.open(map, marker);
+});
+
+// Creating a closure to retain the correct data
+//Note how I pass the current data in the loop into the closure (marker, data)
+(function(marker, data) {
+
+  // Attaching a click event to the current marker
+  google.maps.event.addListener(marker, "click", function(e) {
+    infoWindow.setContent(data.description);
+    infoWindow.open(map, marker);
+  });
+
+})(marker, data);
+
+</script>
+</body>
+</html>
